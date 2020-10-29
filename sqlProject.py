@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 import os
 
 dbName = os.getenv('DBNAME')
-tableName = 'laptopy'
 
 
 class dbSql:
@@ -14,7 +13,8 @@ class dbSql:
         print(f'Connected database {dbName}')
 
     def createTable(self, dataType: dict):
-        self.c.execute(f''' CREATE TABLE IF NOT EXISTS {self.tableName}(id INTEGER PRIMARY KEY AUTOINCREMENT)''')
+        self.c.execute(f''' CREATE TABLE IF NOT EXISTS {self.tableName}
+                       (id INTEGER PRIMARY KEY AUTOINCREMENT)''')
         self.conn.commit()
         tabInfo = self.c.execute(f'PRAGMA table_info ({self.tableName})')\
             .fetchall()
@@ -25,7 +25,7 @@ class dbSql:
         for key in dataType:
             if key not in cols:
                 self.c.execute(f'''ALTER TABLE {self.tableName}
-                                                    ADD COLUMN {key} {dataType[key]}''')
+                                ADD COLUMN {key} {dataType[key]}''')
                 self.conn.commit()
                 print(f'Created table: {self.tableName} and {key}')
 
@@ -46,4 +46,3 @@ class dbSql:
     def __del__(self):
         self.conn.close()
         print('Close connection')
-
